@@ -1,9 +1,9 @@
 ﻿using GoRogue;
 using Microsoft.Xna.Framework;
-using Mordred.World;
+using SadConsoleTemplate.World;
 using SadConsole.Entities;
 
-namespace Mordred.GameObjects.Entities
+namespace SadConsoleTemplate.GameObjects.Entities
 {
     /// <summary>
     /// A base template for an entity

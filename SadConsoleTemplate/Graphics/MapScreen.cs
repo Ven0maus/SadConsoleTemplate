@@ -1,9 +1,9 @@
 ﻿using GoRogue;
-using Mordred.GameObjects.Entities;
-using Mordred.World;
+using SadConsoleTemplate.GameObjects.Entities;
+using SadConsoleTemplate.World;
 using SadConsole;
 
-namespace Mordred.Graphics
+namespace SadConsoleTemplate.Graphics
 {
     public class MapScreen : ContainerConsole
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
 
-namespace Mordred.World
+namespace SadConsoleTemplate.World
 {
     /// <summary>
     /// Base class of a grid cell

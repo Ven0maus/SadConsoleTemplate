@@ -1,6 +1,6 @@
-﻿using Mordred.Graphics;
+﻿using SadConsoleTemplate.Graphics;
 
-namespace Mordred
+namespace SadConsoleTemplate
 {
     public class Game
     {

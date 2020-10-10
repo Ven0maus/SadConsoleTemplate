@@ -4,7 +4,7 @@ using SadConsole.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace Mordred.World
+namespace SadConsoleTemplate.World
 {
     /// <summary>
     /// All the valid map layers

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
-namespace Mordred.GameObjects.Entities
+namespace SadConsoleTemplate.GameObjects.Entities
 {
     /// <summary>
     /// The base class for the player entity
