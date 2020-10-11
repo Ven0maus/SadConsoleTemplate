@@ -31,7 +31,7 @@ namespace SadConsoleTemplate.World
         /// <summary>
         /// The entities directly rendered to the renderConsole's surface.
         /// </summary>
-        private readonly List<Entity> _entities;
+        private readonly Dictionary<Point, Entity> _entities;
         /// <summary>
         /// Represents the console this grid is rendered to.
         /// </summary>
@@ -73,7 +73,7 @@ namespace SadConsoleTemplate.World
             Width = width;
             Height = height;
             _cells = new GridCell[width * height];
-            _entities = new List<Entity>();
+            _entities = new Dictionary<Point, Entity>();
             FieldOfView = new ArrayMap<bool>(Width, Height);
         }
 
@@ -132,6 +132,19 @@ namespace SadConsoleTemplate.World
         }
 
         /// <summary>
+        /// Returns the entity at that position in the map.
+        /// Returns null if no entity at the given position.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public Entity GetEntityAt(int x, int y)
+        {
+            _entities.TryGetValue(new Point(x, y), out Entity entity);
+            return entity;
+        }
+
+        /// <summary>
         /// Create's a rendering console for this grid to be rendered on.
         /// </summary>
         /// <param name="viewport"></param>
@@ -148,7 +161,7 @@ namespace SadConsoleTemplate.World
             renderer.SetSurface(_cells, Width, Height);
             renderer.IsDirty = true;
 
-            foreach (var entity in _entities)
+            foreach (var entity in _entities.Values)
                 renderer.Children.Add(entity);
 
             return renderer;
@@ -171,7 +184,7 @@ namespace SadConsoleTemplate.World
                 _renderConsole.Children.Add(entity);
                 _renderConsole.IsDirty = true;
             }
-            _entities.Add(entity);
+            _entities.Add(entity.Position, entity);
         }
 
         /// <summary>
@@ -193,7 +206,7 @@ namespace SadConsoleTemplate.World
                 if (count != _renderConsole.Children.Count)
                     _renderConsole.IsDirty = true;
             }
-            _entities.Remove(entity);
+            _entities.Remove(entity.Position);
         }
     }
 

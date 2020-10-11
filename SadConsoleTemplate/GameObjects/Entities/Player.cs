@@ -1,6 +1,7 @@
 ﻿using GoRogue;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using SadConsole.Components;
 using System.Collections.Generic;
 
 namespace SadConsoleTemplate.GameObjects.Entities
@@ -19,7 +20,14 @@ namespace SadConsoleTemplate.GameObjects.Entities
             { Keys.Q, Direction.LEFT }, { Keys.D, Direction.RIGHT }
         };
 
-        public Player(Coord position) : base(Color.White, Color.Transparent, '@', position) => FieldOfViewRadius = 8;
+        public Player(Coord position) : base(Color.White, Color.Transparent, '@', position)
+        {
+            FieldOfViewRadius = 8;
+
+            // Incase our viewport != size of game screen
+            // This automatically sync's the camera view
+            Components.Add(new EntityViewSyncComponent());
+        }
 
         /// <summary>
         /// Automatically called by sadconsole to process keyboard input

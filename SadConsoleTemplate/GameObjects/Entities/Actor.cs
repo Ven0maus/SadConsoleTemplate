@@ -62,7 +62,8 @@ namespace SadConsoleTemplate.GameObjects.Entities
             bool canMove = !movementCheck;
             if (movementCheck)
             {
-                canMove = Game.MapScreen.Map.GetCell(targetPos.X, targetPos.Y).IsWalkable;
+                canMove = Game.MapScreen.Map.GetEntityAt(targetPos.X, targetPos.Y) == null 
+                    && Game.MapScreen.Map.GetCell(targetPos.X, targetPos.Y).IsWalkable;
             }
 
             if (canMove)

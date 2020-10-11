@@ -16,12 +16,12 @@ namespace SadConsoleTemplate.Graphics
         /// </summary>
         public ScrollingConsole MapRenderer { get; }
 
-        public MapScreen(int width, int height, int viewportWidth, int viewportHeight)
+        public MapScreen(int width, int height, Rectangle viewport)
         {
             Map = GenerateDungeon(width, height);
 
             // Create a rendering console, and add it to this container console as a child
-            MapRenderer = Map.CreateRenderer(new Rectangle(0, 0, viewportWidth, viewportHeight), Global.FontDefault);
+            MapRenderer = Map.CreateRenderer(viewport, Global.FontDefault);
             Children.Add(MapRenderer);
 
             // Apply focus to the controlled entity, so keyboard input is received

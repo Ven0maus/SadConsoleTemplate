@@ -1,4 +1,5 @@
-﻿using SadConsoleTemplate.Graphics;
+﻿using Microsoft.Xna.Framework;
+using SadConsoleTemplate.Graphics;
 
 namespace SadConsoleTemplate
 {
@@ -27,7 +28,7 @@ namespace SadConsoleTemplate
         /// </summary>
         private static void Init()
         {
-            MapScreen = new MapScreen(Width, Height, Width, Height);
+            MapScreen = new MapScreen(Width, Height, new Rectangle(0, 0, Width, Height));
             SadConsole.Global.CurrentScreen = MapScreen;
         }
     }
