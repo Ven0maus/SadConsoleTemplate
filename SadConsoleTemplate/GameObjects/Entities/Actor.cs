@@ -27,5 +27,43 @@ namespace SadConsoleTemplate.GameObjects.Entities
             Position = position;
             Layer = layer;
         }
+
+        /// <summary>
+        /// Basic colission detection movement
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="movementCheck"></param>
+        /// <returns></returns>
+        public bool MoveTowards(int x, int y, bool movementCheck = true)
+        {
+            var targetPos = new Point(x, y);
+            if (Position == targetPos) return false;
+
+            bool canMove = !movementCheck;
+            if (movementCheck)
+            {
+                canMove = Game.MapScreen.Map.GetCell(targetPos.X, targetPos.Y).IsWalkable;
+            }
+
+            if (canMove)
+            {
+                Position = targetPos;
+            }
+            return canMove;
+        }
+
+        /// <summary>
+        /// Basic colission detection movement
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <param name="movementCheck"></param>
+        /// <returns></returns>
+        public bool MoveTowards(Direction direction, bool movementCheck = true)
+        {
+            var pos = Position;
+            var targetPos = pos += direction;
+            return MoveTowards(targetPos.X, targetPos.Y, movementCheck);
+        }
     }
 }

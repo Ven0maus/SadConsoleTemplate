@@ -41,9 +41,9 @@ namespace SadConsoleTemplate.GameObjects.Entities
                 }
             }
 
-            Position += moveDirection;
+            var moved = MoveTowards(moveDirection);
 
-            if (moveDirection != Direction.NONE)
+            if (moved)
                 return true;
             else
                 return base.ProcessKeyboard(info);
