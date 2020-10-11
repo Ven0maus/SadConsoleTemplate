@@ -14,6 +14,7 @@ namespace SadConsoleTemplate.GameObjects.Entities
         /// The layer this entity is rendered on, (by default MapLayer.ENTITIES)
         /// </summary>
         public int Layer { get; private set; }
+
         public Actor(Color foreground, Color background, int glyph, Coord position)
                     : base(foreground, background, glyph) => Initialize(position, (int)MapLayer.ENTITIES);
 
@@ -29,7 +30,7 @@ namespace SadConsoleTemplate.GameObjects.Entities
         }
 
         /// <summary>
-        /// Basic colission detection movement
+        /// Basic collision detection movement
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -54,7 +55,7 @@ namespace SadConsoleTemplate.GameObjects.Entities
         }
 
         /// <summary>
-        /// Basic colission detection movement
+        /// Basic collision detection movement
         /// </summary>
         /// <param name="direction"></param>
         /// <param name="movementCheck"></param>
