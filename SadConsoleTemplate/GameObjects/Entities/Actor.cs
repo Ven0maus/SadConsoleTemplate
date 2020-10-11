@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using SadConsoleTemplate.World;
 using SadConsole.Entities;
+using SadConsoleTemplate.GameObjects.Components;
 
 namespace SadConsoleTemplate.GameObjects.Entities
 {
@@ -14,17 +15,34 @@ namespace SadConsoleTemplate.GameObjects.Entities
         /// The layer this entity is rendered on, (by default MapLayer.ENTITIES)
         /// </summary>
         public int Layer { get; private set; }
+        /// <summary>
+        /// The radius of the field of view
+        /// </summary>
+        public int FieldOfViewRadius { get; set; }
+        /// <summary>
+        /// The component responsible for calculating the FieldOfView positions
+        /// </summary>
+        public FovComponent FieldOfView { get; private set; }
 
-        public Actor(Color foreground, Color background, int glyph, Coord position)
-                    : base(foreground, background, glyph) => Initialize(position, (int)MapLayer.ENTITIES);
+        /// <summary>
+        /// Base constructor for an actor
+        /// </summary>
+        /// <param name="foreground"></param>
+        /// <param name="background"></param>
+        /// <param name="glyph"></param>
+        /// <param name="position"></param>
+        /// <param name="distanceCalculationMethod">Default MANHATTAN calculation</param>
+        public Actor(Color foreground, Color background, int glyph, Coord position, Distance distanceCalculationMethod = null)
+                    : base(foreground, background, glyph) => Initialize(position, (int)MapLayer.ENTITIES, distanceCalculationMethod);
 
         /// <summary>
         /// Initializes the basic properties of an entity
         /// </summary>
         /// <param name="position"></param>
         /// <param name="layer"></param>
-        private void Initialize(Coord position, int layer)
+        private void Initialize(Coord position, int layer, Distance distanceCalculationMethod)
         {
+            FieldOfView = new FovComponent(this, distanceCalculationMethod ?? Distance.MANHATTAN);
             Position = position;
             Layer = layer;
         }

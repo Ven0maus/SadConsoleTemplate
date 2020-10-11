@@ -1,8 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GoRogue.MapViews;
+using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Entities;
+using SadConsoleTemplate.GameObjects.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SadConsoleTemplate.World
 {
@@ -33,6 +36,8 @@ namespace SadConsoleTemplate.World
         /// Represents the console this grid is rendered to.
         /// </summary>
         private SadConsole.Console _renderConsole;
+
+        public ArrayMap<bool> FieldOfView { get; }
 
         public int Width { get; }
         public int Height { get; }
@@ -66,6 +71,7 @@ namespace SadConsoleTemplate.World
             Height = height;
             _cells = new GridCell[width * height];
             _entities = new List<Entity>();
+            FieldOfView = new ArrayMap<bool>(Width, Height);
         }
 
         /// <summary>
@@ -93,7 +99,17 @@ namespace SadConsoleTemplate.World
         /// <param name="cell"></param>
         public void SetCell(int x, int y, GridCell cell)
         {
-            _cells[y * Width + x] = cell;
+            var oldCell = _cells[y * Width + x];
+            // Update field of view, if it has changed.
+            if (oldCell == null || cell == null || oldCell.IsTransparent != cell.IsTransparent)
+            {
+                FieldOfView[y * Width + x] = cell != null && cell.IsTransparent;
+            }
+
+            if (oldCell != null)
+                _cells[y * Width + x].Replace(cell);
+            else
+                _cells[y * Width + x] = cell;
         }
 
         /// <summary>
@@ -117,6 +133,9 @@ namespace SadConsoleTemplate.World
         /// <returns></returns>
         public ScrollingConsole CreateRenderer(Rectangle viewport, Font font)
         {
+            if (_cells.Any(a => a == null)) 
+                throw new Exception("Please initialize the grid first.");
+
             var renderer = new ScrollingConsole(Width, Height, font, viewport, _cells);
             _renderConsole = renderer;
 
@@ -135,6 +154,12 @@ namespace SadConsoleTemplate.World
         /// <param name="entity"></param>
         public void AddEntity(Entity entity)
         {
+            // Initialize field of view
+            if (entity is Actor actor)
+            {
+                actor.FieldOfView.Initialize(FieldOfView);
+            }
+
             if (_renderConsole != null)
             {
                 _renderConsole.Children.Add(entity);
@@ -149,6 +174,12 @@ namespace SadConsoleTemplate.World
         /// <param name="entity"></param>
         public void RemoveEntity(Entity entity)
         {
+            // Reset field of view
+            if (entity is Actor actor)
+            {
+                actor.FieldOfView.Reset();
+            }
+
             if (_renderConsole != null)
             {
                 var count = _renderConsole.Children.Count;

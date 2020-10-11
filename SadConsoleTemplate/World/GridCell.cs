@@ -19,7 +19,7 @@ namespace SadConsoleTemplate.World
         /// <summary>
         /// The layer this cell is build on
         /// </summary>
-        public int Layer { get; }
+        public int Layer { get; private set; }
 
         public GridCell(Color foreground, Color background, int glyph, int layer, bool isWalkable, bool isTransparent) : 
             base(foreground, background, glyph)
@@ -31,6 +31,21 @@ namespace SadConsoleTemplate.World
 
         public GridCell(GridCell cell) : base(cell.Foreground, cell.Background, cell.Glyph)
         {
+            IsWalkable = cell.IsWalkable;
+            IsTransparent = cell.IsTransparent;
+            Layer = cell.Layer;
+        }
+
+        /// <summary>
+        /// Replaces all the data of this cell with the given cell's data
+        /// </summary>
+        /// <param name="cell"></param>
+        public void Replace(GridCell cell)
+        {
+            // Copy base data
+            CopyAppearanceFrom(cell);
+
+            // Copy custom data
             IsWalkable = cell.IsWalkable;
             IsTransparent = cell.IsTransparent;
             Layer = cell.Layer;

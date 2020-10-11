@@ -19,8 +19,7 @@ namespace SadConsoleTemplate.GameObjects.Entities
             { Keys.Q, Direction.LEFT }, { Keys.D, Direction.RIGHT }
         };
 
-        public Player(Coord position) : base(Color.White, Color.Transparent, '@', position) 
-        { }
+        public Player(Coord position) : base(Color.White, Color.Transparent, '@', position) => FieldOfViewRadius = 8;
 
         /// <summary>
         /// Automatically called by sadconsole to process keyboard input
