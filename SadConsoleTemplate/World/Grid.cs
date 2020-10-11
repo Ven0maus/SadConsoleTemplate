@@ -37,6 +37,9 @@ namespace SadConsoleTemplate.World
         /// </summary>
         private SadConsole.Console _renderConsole;
 
+        /// <summary>
+        /// Contains all positions in the grid, where true is a position that isTransparent and false !isTransparent
+        /// </summary>
         public ArrayMap<bool> FieldOfView { get; }
 
         public int Width { get; }
@@ -106,6 +109,9 @@ namespace SadConsoleTemplate.World
                 FieldOfView[y * Width + x] = cell != null && cell.IsTransparent;
             }
 
+            // Replace cell's properties if it exists, so it directly impacts the renderer's reference to our cells
+            // If we assigned a new cell, the reference would be lost and we would need to call _renderConsole.SetSurface again
+            // Else condition exists for cell initialization before CreateRenderer is called
             if (oldCell != null)
                 _cells[y * Width + x].Replace(cell);
             else
