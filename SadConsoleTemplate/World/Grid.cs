@@ -173,6 +173,9 @@ namespace SadConsoleTemplate.World
         /// <param name="entity"></param>
         public void AddEntity(Entity entity)
         {
+            if (_entities.ContainsKey(entity.Position))
+                throw new Exception("An entity already exists at the given position: " + entity.Position);
+
             // Initialize field of view
             if (entity is Actor actor)
             {
