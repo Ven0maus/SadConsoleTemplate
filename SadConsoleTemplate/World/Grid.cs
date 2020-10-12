@@ -169,12 +169,13 @@ namespace SadConsoleTemplate.World
 
         /// <summary>
         /// Add's an entity to be rendered by the grid.
+        /// Returns true if succesful, false if position was occupied by another entity.
         /// </summary>
         /// <param name="entity"></param>
-        public void AddEntity(Entity entity)
+        public bool AddEntity(Entity entity)
         {
             if (_entities.ContainsKey(entity.Position))
-                throw new Exception("An entity already exists at the given position: " + entity.Position);
+                return false;
 
             // Initialize field of view
             if (entity is Actor actor)
@@ -188,6 +189,7 @@ namespace SadConsoleTemplate.World
                 _renderConsole.IsDirty = true;
             }
             _entities.Add(entity.Position, entity);
+            return true;
         }
 
         /// <summary>
