@@ -140,6 +140,12 @@ namespace SadConsoleTemplate.World
             Walkability[args.FromPosition.Y * Width + args.FromPosition.X] = true;
             // Set new position
             Walkability[args.Entity.Position.Y * Width + args.Entity.Position.X] = false;
+            
+            // Recalculate field of view
+            if (args.Entity is Actor actor)
+            {
+                actor.FieldOfView.Calculate();
+            }
         }
 
         /// <summary>
@@ -206,6 +212,7 @@ namespace SadConsoleTemplate.World
             if (entity is Actor actor)
             {
                 actor.FieldOfView.Initialize(FieldOfView);
+                actor.FieldOfView.Calculate();
             }
 
             if (_renderConsole != null)

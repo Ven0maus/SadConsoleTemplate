@@ -45,12 +45,6 @@ namespace SadConsoleTemplate.Graphics
 
         private void ControlledEntity_Moved(object sender, SadConsole.Entities.Entity.EntityMovedEventArgs e)
         {
-            // Calculate field of view
-            if (Map.ControlledEntity is Actor actor)
-            {
-                actor.FieldOfView.Calculate();
-            }
-
             // Center the viewport of the camera onto the controlled entity
             MapRenderer.CenterViewPortOnPoint(Map.ControlledEntity.Position);
         }
