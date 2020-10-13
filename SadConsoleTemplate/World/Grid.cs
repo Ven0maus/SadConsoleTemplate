@@ -1,4 +1,6 @@
-﻿using GoRogue.MapViews;
+﻿using GoRogue;
+using GoRogue.MapViews;
+using GoRogue.Pathing;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Entities;
@@ -31,7 +33,7 @@ namespace SadConsoleTemplate.World
         /// <summary>
         /// The entities directly rendered to the renderConsole's surface.
         /// </summary>
-        private readonly Dictionary<Point, Entity> _entities;
+        private readonly List<Entity> _entities;
         /// <summary>
         /// Represents the console this grid is rendered to.
         /// </summary>
@@ -41,6 +43,14 @@ namespace SadConsoleTemplate.World
         /// Contains all positions in the grid, where true is a position that isTransparent and false !isTransparent
         /// </summary>
         public ArrayMap<bool> FieldOfView { get; }
+        /// <summary>
+        /// Contains all positions in the grid, where true is a position that isWalkable and false !isWalkable
+        /// </summary>
+        public ArrayMap<bool> Walkability { get; }
+        /// <summary>
+        /// Basic pathfinder, that chooses path's based on performance not on shortest length.
+        /// </summary>
+        public FastAStar PathFinder { get; }
 
         public int Width { get; }
         public int Height { get; }
@@ -73,8 +83,10 @@ namespace SadConsoleTemplate.World
             Width = width;
             Height = height;
             _cells = new GridCell[width * height];
-            _entities = new Dictionary<Point, Entity>();
+            _entities = new List<Entity>();
             FieldOfView = new ArrayMap<bool>(Width, Height);
+            Walkability = new ArrayMap<bool>(Width, Height);
+            PathFinder = new FastAStar(Walkability, Distance.MANHATTAN);
         }
 
         /// <summary>
@@ -103,11 +115,10 @@ namespace SadConsoleTemplate.World
         public void SetCell(int x, int y, GridCell cell)
         {
             var oldCell = _cells[y * Width + x];
-            // Update field of view, if it has changed.
-            if (oldCell == null || cell == null || oldCell.IsTransparent != cell.IsTransparent)
-            {
-                FieldOfView[y * Width + x] = cell != null && cell.IsTransparent;
-            }
+
+            // Update field of view / walkability, if it has changed.
+            FieldOfView[y * Width + x] = cell != null && cell.IsTransparent;
+            Walkability[y * Width + x] = cell != null && cell.IsWalkable && GetEntityAt(x, y) == null;
 
             // Replace cell's properties if it exists, so it directly impacts the renderer's reference to our cells
             // If we assigned a new cell, the reference would be lost and we would need to call _renderConsole.SetSurface again
@@ -116,6 +127,19 @@ namespace SadConsoleTemplate.World
                 _cells[y * Width + x].Replace(cell);
             else
                 _cells[y * Width + x] = cell;
+        }
+
+        /// <summary>
+        /// Handles pathfinding walkability view syncing for entities
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnEntityMoved(object sender, Entity.EntityMovedEventArgs args)
+        {
+            // Reset from position
+            Walkability[args.FromPosition.Y * Width + args.FromPosition.X] = true;
+            // Set new position
+            Walkability[args.Entity.Position.Y * Width + args.Entity.Position.X] = false;
         }
 
         /// <summary>
@@ -140,7 +164,8 @@ namespace SadConsoleTemplate.World
         /// <returns></returns>
         public Entity GetEntityAt(int x, int y)
         {
-            _entities.TryGetValue(new Point(x, y), out Entity entity);
+            var position = new Point(x, y);
+            var entity = _entities.FirstOrDefault(a => a.Position == position); 
             return entity;
         }
 
@@ -150,7 +175,7 @@ namespace SadConsoleTemplate.World
         /// <param name="viewport"></param>
         /// <param name="font"></param>
         /// <returns></returns>
-        public ScrollingConsole CreateRenderer(Rectangle viewport, Font font)
+        public ScrollingConsole CreateRenderer(Microsoft.Xna.Framework.Rectangle viewport, Font font)
         {
             if (_cells.Any(a => a == null)) 
                 throw new Exception("Please initialize the grid first.");
@@ -161,7 +186,7 @@ namespace SadConsoleTemplate.World
             renderer.SetSurface(_cells, Width, Height);
             renderer.IsDirty = true;
 
-            foreach (var entity in _entities.Values)
+            foreach (var entity in _entities)
                 renderer.Children.Add(entity);
 
             return renderer;
@@ -174,7 +199,7 @@ namespace SadConsoleTemplate.World
         /// <param name="entity"></param>
         public bool AddEntity(Entity entity)
         {
-            if (_entities.ContainsKey(entity.Position))
+            if (_entities.Any(a => a.Position == entity.Position))
                 return false;
 
             // Initialize field of view
@@ -188,7 +213,8 @@ namespace SadConsoleTemplate.World
                 _renderConsole.Children.Add(entity);
                 _renderConsole.IsDirty = true;
             }
-            _entities.Add(entity.Position, entity);
+            entity.Moved += OnEntityMoved;
+            _entities.Add(entity);
             return true;
         }
 
@@ -211,7 +237,8 @@ namespace SadConsoleTemplate.World
                 if (count != _renderConsole.Children.Count)
                     _renderConsole.IsDirty = true;
             }
-            _entities.Remove(entity.Position);
+            entity.Moved -= OnEntityMoved;
+            _entities.Remove(entity);
         }
     }
 
