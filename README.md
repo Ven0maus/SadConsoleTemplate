@@ -1,2 +1,2 @@
 # SadConsoleTemplate
-A very basic template for a 2D console game, based on MonoGame and SadConsole library.
+A very basic template for a 2D console game, based on MonoGame and SadConsole library with GoRogue lib integration.
