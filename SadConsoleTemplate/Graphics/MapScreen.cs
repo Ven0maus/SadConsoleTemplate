@@ -2,6 +2,7 @@
 using SadConsoleTemplate.GameObjects.Entities;
 using SadConsoleTemplate.World;
 using SadConsole;
+using SadConsoleTemplate.World.Generators;
 
 namespace SadConsoleTemplate.Graphics
 {
@@ -60,7 +61,7 @@ namespace SadConsoleTemplate.Graphics
             var map = new Grid(width, height);
 
             // Set a basic grid
-            map.SetBaseGrid();
+            map.Generate(new EmptyWorldGen());
 
             // Generate player
             var pos = new Coord(width / 2, height / 2);

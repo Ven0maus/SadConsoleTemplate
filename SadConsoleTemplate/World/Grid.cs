@@ -89,21 +89,15 @@ namespace SadConsoleTemplate.World
             PathFinder = new FastAStar(Walkability, Distance.MANHATTAN);
         }
 
-        /// <summary>
-        /// Create's a very basic grid, with walls around the grid.
-        /// </summary>
-        public void SetBaseGrid()
+        public void Generate(IEnumerable<WorldGen> generators)
         {
-            for (int y=0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    if (x != 0 && y != 0 && x != Width - 1 && y != Height - 1)
-                        SetCell(x, y, new GridCell(Color.BlanchedAlmond, Color.Black, ' ', (int)MapLayer.TERRAIN, true, true));
-                    else
-                        SetCell(x, y, new GridCell(Color.DarkGray, Color.Black, '#', (int)MapLayer.TERRAIN, false, false));
-                }
-            }
+            foreach (var gen in generators)
+                gen.Execute(this);
+        }
+
+        public void Generate(params WorldGen[] generators)
+        {
+            Generate(generators as IEnumerable<WorldGen>);
         }
 
         /// <summary>
