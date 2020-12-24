@@ -25,6 +25,11 @@ namespace SadConsoleTemplate.GameObjects.Entities
         public FovComponent FieldOfView { get; private set; }
 
         /// <summary>
+        /// The grid object this actor is part of
+        /// </summary>
+        public Grid World { get { return Game.GameScreen.WorldScreen.World; } }
+
+        /// <summary>
         /// Base constructor for an actor
         /// </summary>
         /// <param name="foreground"></param>
@@ -62,8 +67,8 @@ namespace SadConsoleTemplate.GameObjects.Entities
             bool canMove = !movementCheck;
             if (movementCheck)
             {
-                canMove = Game.WorldScreen.Map.GetEntityAt(targetPos.X, targetPos.Y) == null 
-                    && Game.WorldScreen.Map.GetCell(targetPos.X, targetPos.Y).IsWalkable;
+                canMove = World.GetEntityAt(targetPos.X, targetPos.Y) == null 
+                    && World.GetCell(targetPos.X, targetPos.Y).IsWalkable;
             }
 
             if (canMove)

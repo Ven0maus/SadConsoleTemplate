@@ -8,7 +8,7 @@ namespace SadConsoleTemplate
         public const int WindowWidth = 80;
         public const int WindowHeight = 25;
 
-        public static WorldScreen WorldScreen { get; private set; }
+        public static GameScreen GameScreen { get; private set; }
 
         static void Main()
         {
@@ -24,12 +24,12 @@ namespace SadConsoleTemplate
         }
 
         /// <summary>
-        /// Base initialize method to setup the WorldScreen as current screen
+        /// Base initialize method to setup the GameScreen as current screen
         /// </summary>
         private static void Init()
         {
-            WorldScreen = new WorldScreen(new Rectangle(0, 0, WindowWidth, WindowHeight));
-            SadConsole.Global.CurrentScreen = WorldScreen;
+            GameScreen = new GameScreen(new Rectangle(0, 0, WindowWidth, WindowHeight));
+            SadConsole.Global.CurrentScreen = GameScreen;
         }
     }
 }

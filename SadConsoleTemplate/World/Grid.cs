@@ -2,7 +2,6 @@
 using GoRogue.MapViews;
 using GoRogue.Pathing;
 using Microsoft.Xna.Framework;
-using SadConsole;
 using SadConsole.Entities;
 using SadConsoleTemplate.GameObjects.Entities;
 using SadConsoleTemplate.World.Generation;
@@ -38,7 +37,7 @@ namespace SadConsoleTemplate.World
         /// <summary>
         /// Represents the console this grid is rendered to.
         /// </summary>
-        private SadConsole.Console _renderConsole;
+        private readonly SadConsole.Console _renderConsole;
 
         /// <summary>
         /// Contains all positions in the grid, where true is a position that isTransparent and false !isTransparent
@@ -79,8 +78,9 @@ namespace SadConsoleTemplate.World
         /// </summary>
         public event EventHandler<ControlledEntityChangedArgs> ControlledEntityChanged;
 
-        public Grid(int width, int height)
+        public Grid(int width, int height, SadConsole.Console screen)
         {
+            _renderConsole = screen;
             Width = width;
             Height = height;
             _cells = new GridCell[width * height];
@@ -90,15 +90,10 @@ namespace SadConsoleTemplate.World
             PathFinder = new FastAStar(Walkability, Distance.MANHATTAN);
         }
 
-        public void Generate(IEnumerable<Generator> generators)
+        public void Generate(params Generator[] generators)
         {
             foreach (var gen in generators)
                 gen.Execute(this);
-        }
-
-        public void Generate(params Generator[] generators)
-        {
-            Generate(generators as IEnumerable<Generator>);
         }
 
         /// <summary>
@@ -176,21 +171,16 @@ namespace SadConsoleTemplate.World
         /// <param name="viewport"></param>
         /// <param name="font"></param>
         /// <returns></returns>
-        public ScrollingConsole CreateRenderer(Microsoft.Xna.Framework.Rectangle viewport, Font font)
+        public void InitializeRenderer()
         {
             if (_cells.Any(a => a == null)) 
                 throw new Exception("Please initialize the grid first.");
 
-            var renderer = new ScrollingConsole(Width, Height, font, viewport, _cells);
-            _renderConsole = renderer;
-
-            renderer.SetSurface(_cells, Width, Height);
-            renderer.IsDirty = true;
+            _renderConsole.SetSurface(_cells, Width, Height);
+            _renderConsole.IsDirty = true;
 
             foreach (var entity in _entities)
-                renderer.Children.Add(entity);
-
-            return renderer;
+                _renderConsole.Children.Add(entity);
         }
 
         /// <summary>
