@@ -5,15 +5,15 @@ namespace SadConsoleTemplate
 {
     public class Game
     {
-        public const int Width = 80;
-        public const int Height = 25;
+        public const int WindowWidth = 80;
+        public const int WindowHeight = 25;
 
-        public static MapScreen MapScreen { get; private set; }
+        public static WorldScreen WorldScreen { get; private set; }
 
         static void Main()
         {
             // Setup the engine and create the main window.
-            SadConsole.Game.Create(Width, Height);
+            SadConsole.Game.Create(WindowWidth, WindowHeight);
 
             // Hook the start event so we can add consoles to the system.
             SadConsole.Game.OnInitialize = Init;
@@ -24,12 +24,12 @@ namespace SadConsoleTemplate
         }
 
         /// <summary>
-        /// Base initialize method to setup the MapScreen as current screen
+        /// Base initialize method to setup the WorldScreen as current screen
         /// </summary>
         private static void Init()
         {
-            MapScreen = new MapScreen(Width, Height, new Rectangle(0, 0, Width, Height));
-            SadConsole.Global.CurrentScreen = MapScreen;
+            WorldScreen = new WorldScreen(new Rectangle(0, 0, WindowWidth, WindowHeight));
+            SadConsole.Global.CurrentScreen = WorldScreen;
         }
     }
 }

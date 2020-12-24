@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Entities;
 using SadConsoleTemplate.GameObjects.Entities;
+using SadConsoleTemplate.World.Generation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -89,15 +90,15 @@ namespace SadConsoleTemplate.World
             PathFinder = new FastAStar(Walkability, Distance.MANHATTAN);
         }
 
-        public void Generate(IEnumerable<WorldGen> generators)
+        public void Generate(IEnumerable<Generator> generators)
         {
             foreach (var gen in generators)
                 gen.Execute(this);
         }
 
-        public void Generate(params WorldGen[] generators)
+        public void Generate(params Generator[] generators)
         {
-            Generate(generators as IEnumerable<WorldGen>);
+            Generate(generators as IEnumerable<Generator>);
         }
 
         /// <summary>

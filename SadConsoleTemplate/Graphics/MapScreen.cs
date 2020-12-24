@@ -1,12 +1,11 @@
 ﻿using GoRogue;
-using SadConsoleTemplate.GameObjects.Entities;
 using SadConsoleTemplate.World;
 using SadConsole;
-using SadConsoleTemplate.World.Generators;
+using SadConsoleTemplate.World.Settings;
 
 namespace SadConsoleTemplate.Graphics
 {
-    public class MapScreen : ContainerConsole
+    public class WorldScreen : ContainerConsole
     {
         /// <summary>
         /// The grid associated with this MapScreen
@@ -17,9 +16,9 @@ namespace SadConsoleTemplate.Graphics
         /// </summary>
         public ScrollingConsole MapRenderer { get; }
 
-        public MapScreen(int width, int height, Rectangle viewport)
+        public WorldScreen(Rectangle viewport)
         {
-            Map = GenerateDungeon(width, height);
+            Map = CreateWorld(WorldGenSettings.WorldSizeWidth, WorldGenSettings.WorldSizeHeight);
 
             // Create a rendering console, and add it to this container console as a child
             MapRenderer = Map.CreateRenderer(viewport, Global.FontDefault);
@@ -56,18 +55,10 @@ namespace SadConsoleTemplate.Graphics
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        private static Grid GenerateDungeon(int width, int height)
+        private static Grid CreateWorld(int width, int height)
         {
             var map = new Grid(width, height);
-
-            // Set a basic grid
-            map.Generate(new EmptyWorldGen());
-
-            // Generate player
-            var pos = new Coord(width / 2, height / 2);
-            map.ControlledEntity = new Player(pos);
-            map.AddEntity(map.ControlledEntity);
-
+            map.Generate(WorldGenSettings.WorldGeneration);
             return map;
         }
     }
