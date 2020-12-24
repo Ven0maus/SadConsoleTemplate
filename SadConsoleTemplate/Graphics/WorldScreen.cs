@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Input;
-using SadConsoleTemplate.GameObjects.Entities;
 using SadConsoleTemplate.World;
 using SadConsoleTemplate.World.Settings;
 
@@ -18,16 +17,15 @@ namespace SadConsoleTemplate.Graphics
             // Initialize the cells of the world onto the renderer
             World.InitializeRenderer();
 
-            // Apply focus to the world screen
-            IsFocused = true;
-            
-
             // Apply required events to the controlled entity
             World.ControlledEntity.Moved += ControlledEntity_Moved;
             World.ControlledEntityChanged += Map_ControlledEntityChanged;
 
-            // Center viewport and calculate field of view
-            ControlledEntity_Moved(null, null);
+            // Center viewport
+            this.CenterViewPortOnPoint(World.ControlledEntity.Position);
+
+            // Apply focus to the world screen
+            IsFocused = true;
         }
 
         /// <summary>
