@@ -55,11 +55,11 @@ namespace SadConsoleTemplate.World
         public int Width { get; }
         public int Height { get; }
 
-        private Entity _controlledEntity;
+        private Player _controlledEntity;
         /// <summary>
         /// The entity that has input focus on this grid.
         /// </summary>
-        public Entity ControlledEntity
+        public Player ControlledEntity
         {
             get { return _controlledEntity; }
             set
@@ -242,9 +242,9 @@ namespace SadConsoleTemplate.World
         /// <summary>
         /// The previous entity before change.
         /// </summary>
-        public Entity OldEntity;
+        public Player OldEntity;
 
-        public ControlledEntityChangedArgs(Entity oldEntity)
+        public ControlledEntityChangedArgs(Player oldEntity)
         {
             OldEntity = oldEntity;
         }

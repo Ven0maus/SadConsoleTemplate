@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
+using SadConsole.Input;
+using SadConsoleTemplate.GameObjects.Entities;
 using SadConsoleTemplate.World;
 using SadConsoleTemplate.World.Settings;
 
@@ -16,8 +18,9 @@ namespace SadConsoleTemplate.Graphics
             // Initialize the cells of the world onto the renderer
             World.InitializeRenderer();
 
-            // Apply focus to the controlled entity, so keyboard input is received
-            World.ControlledEntity.IsFocused = true;
+            // Apply focus to the world screen
+            IsFocused = true;
+            
 
             // Apply required events to the controlled entity
             World.ControlledEntity.Moved += ControlledEntity_Moved;
@@ -50,6 +53,12 @@ namespace SadConsoleTemplate.Graphics
         {
             // Center the viewport of the camera onto the controlled entity
             this.CenterViewPortOnPoint(World.ControlledEntity.Position);
+        }
+
+        public override bool ProcessKeyboard(Keyboard info)
+        {
+            if (World.ControlledEntity == null) return false;
+            return World.ControlledEntity.ProcessMovement(info);
         }
     }
 }

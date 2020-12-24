@@ -29,12 +29,7 @@ namespace SadConsoleTemplate.GameObjects.Entities
             Components.Add(new EntityViewSyncComponent());
         }
 
-        /// <summary>
-        /// Automatically called by sadconsole to process keyboard input
-        /// </summary>
-        /// <param name="info"></param>
-        /// <returns></returns>
-        public override bool ProcessKeyboard(SadConsole.Input.Keyboard info)
+        public bool ProcessMovement(SadConsole.Input.Keyboard info)
         {
             Direction moveDirection = Direction.NONE;
 
@@ -53,7 +48,7 @@ namespace SadConsoleTemplate.GameObjects.Entities
             if (moved)
                 return true;
             else
-                return base.ProcessKeyboard(info);
+                return false;
         }
     }
 }
