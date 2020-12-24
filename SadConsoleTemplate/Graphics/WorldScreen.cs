@@ -12,7 +12,11 @@ namespace SadConsoleTemplate.Graphics
 
         public WorldScreen(int width, int height, Font font, Rectangle viewPort) : base(width, height, font, viewPort)
         {
-            World = CreateWorld();
+            // Initialize world grid
+            World = new Grid(WorldGenSettings.WorldSizeWidth, WorldGenSettings.WorldSizeHeight, this);
+
+            // Generate world cells based on world gen settings
+            World.Generate(WorldGenSettings.WorldGeneration);
 
             // Initialize the cells of the world onto the renderer
             World.InitializeRenderer();
@@ -26,17 +30,6 @@ namespace SadConsoleTemplate.Graphics
 
             // Apply focus to the world screen
             IsFocused = true;
-        }
-
-        /// <summary>
-        /// Creates the world grid based on the WorldGenSettings generation.
-        /// </summary>
-        /// <returns></returns>
-        private Grid CreateWorld()
-        {
-            var map = new Grid(WorldGenSettings.WorldSizeWidth, WorldGenSettings.WorldSizeHeight, this);
-            map.Generate(WorldGenSettings.WorldGeneration);
-            return map;
         }
 
         private void Map_ControlledEntityChanged(object sender, ControlledEntityChangedArgs e)
