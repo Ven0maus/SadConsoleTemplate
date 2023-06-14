@@ -13,7 +13,7 @@ namespace SadConsoleTemplate
                 .SetScreenSize(Constants.Screens.GameContainerWidth, Constants.Screens.GameContainerHeight)
                 .OnStart(OnInitialization)
                 .UseFrameUpdateEvent(OnFrameUpdate)
-                .SetStartingScreen(a => new GameContainer())
+                .SetStartingScreen<GameContainer>()
                 .IsStartingScreenFocused(false)
                 .ConfigureFonts((f) => f.UseBuiltinFontExtended());
 

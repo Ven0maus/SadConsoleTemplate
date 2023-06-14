@@ -16,6 +16,11 @@ namespace SadConsoleTemplate.Managers.Entities
         private readonly ConcurrentDictionary<Point, HashSet<Actor>> _entities = new();
         private readonly ConcurrentDictionary<Point, object> _lockObjects = new();
 
+        /// <summary>
+        /// Helper method to lock the hashset collection within.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="action"></param>
         private void ApplyActionOnHashSet(Point point, Action<HashSet<Actor>> action)
         {
             // Get or create the hash set for a specific Point
@@ -40,7 +45,7 @@ namespace SadConsoleTemplate.Managers.Entities
             }
         }
 
-        /// <inheritdoc>/>
+        /// <inheritdoc/>
         public override void SpawnAt(Point position, Actor actor)
         {
             ApplyActionOnHashSet(position, (actors) => 
@@ -60,11 +65,13 @@ namespace SadConsoleTemplate.Managers.Entities
             return actor;
         }
 
+        /// <inheritdoc/>
         public override bool EntitiesExistAt(Point point)
         {
             return _entities.ContainsKey(point);
         }
 
+        /// <inheritdoc/>
         public override IEnumerable<Actor> GetEntitiesAt(Point point)
         {
             IEnumerable<Actor> actorsEnumerable = Enumerable.Empty<Actor>();
@@ -75,6 +82,7 @@ namespace SadConsoleTemplate.Managers.Entities
             return actorsEnumerable;
         }
 
+        /// <inheritdoc/>
         public override void Remove(Actor actor)
         {
             ApplyActionOnHashSet(actor.Position, (actors) =>
@@ -84,6 +92,7 @@ namespace SadConsoleTemplate.Managers.Entities
             });
         }
 
+        /// <inheritdoc/>
         public override IEnumerable<Actor> RemoveAll(Point position, Func<Actor, bool> criteria = null)
         {
             var removedActors = new List<Actor>();
@@ -106,6 +115,7 @@ namespace SadConsoleTemplate.Managers.Entities
             return removedActors;
         }
 
+        /// <inheritdoc/>
         protected override void UpdateEntityPositionWithinManager(object sender, ValueChangedEventArgs<Point> e)
         {
             var actor = (Actor)sender;
