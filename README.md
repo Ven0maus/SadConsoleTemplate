@@ -4,3 +4,5 @@ A very basic template for a 2D console game, based on MonoGame and SadConsole li
 Release 1.0 supports v8.9
 
 Release 2.0 supports v9
+
+Release 3.0 supports v10
