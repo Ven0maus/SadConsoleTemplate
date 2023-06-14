@@ -75,6 +75,7 @@ namespace SadConsoleTemplate.Managers.Entities
         public override IEnumerable<Actor> GetEntitiesAt(Point point)
         {
             IEnumerable<Actor> actorsEnumerable = Enumerable.Empty<Actor>();
+            if (!EntitiesExistAt(point)) return actorsEnumerable;
             ApplyActionOnHashSet(point, (actors) =>
             {
                 actorsEnumerable = actors.ToArray();
@@ -85,6 +86,7 @@ namespace SadConsoleTemplate.Managers.Entities
         /// <inheritdoc/>
         public override void Remove(Actor actor)
         {
+            if (!EntitiesExistAt(actor.Position)) return;
             ApplyActionOnHashSet(actor.Position, (actors) =>
             {
                 actor.PositionChanged -= UpdateEntityPositionWithinManager;
@@ -95,6 +97,7 @@ namespace SadConsoleTemplate.Managers.Entities
         /// <inheritdoc/>
         public override IEnumerable<Actor> RemoveAll(Point position, Func<Actor, bool> criteria = null)
         {
+            if (!EntitiesExistAt(position)) return Enumerable.Empty<Actor>();
             var removedActors = new List<Actor>();
             ApplyActionOnHashSet(position, (actors) =>
             {
@@ -121,12 +124,15 @@ namespace SadConsoleTemplate.Managers.Entities
             var actor = (Actor)sender;
 
             // Remove from previous
-            ApplyActionOnHashSet(e.OldValue, (actors) =>
+            if (EntitiesExistAt(e.OldValue))
             {
-                actors.Remove(actor);
-                if (actors.Count == 0)
-                    _entities.Remove(e.OldValue, out _);
-            });
+                ApplyActionOnHashSet(e.OldValue, (actors) =>
+                {
+                    actors.Remove(actor);
+                    if (actors.Count == 0)
+                        _entities.Remove(e.OldValue, out _);
+                });
+            }
 
             // Add to the current
             ApplyActionOnHashSet(e.NewValue, (actors) =>
