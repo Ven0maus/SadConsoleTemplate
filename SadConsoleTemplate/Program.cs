@@ -1,5 +1,5 @@
-﻿using SadConsoleTemplate.Graphics;
-using SadConsole;
+﻿using SadConsole;
+using SadConsoleTemplate.Graphics.Screens;
 
 namespace SadConsoleTemplate
 {
@@ -7,26 +7,29 @@ namespace SadConsoleTemplate
     {
         static void Main(string[] args)
         {
-            // Setup the engine and create the main window.
-            Game.Create(Constants.Screens.GameScreen.Width, Constants.Screens.GameScreen.Height);
+            Settings.WindowTitle = "SadConsoleTemplate";
 
-            // Hook the start event so we can add consoles to the system.
-            Game.Instance.OnStart = OnInitialization;
-            Game.Instance.FrameUpdate += OnFrameUpdate;
+            Game.Configuration gameStartup = new Game.Configuration()
+                .SetScreenSize(Constants.Screens.GameContainerWidth, Constants.Screens.GameContainerHeight)
+                .OnStart(OnInitialization)
+                .UseFrameUpdateEvent(OnFrameUpdate)
+                .SetStartingScreen(a => new GameContainer())
+                .IsStartingScreenFocused(false)
+                .ConfigureFonts((f) => f.UseBuiltinFontExtended());
 
-            // Start the game.
+            Game.Create(gameStartup);
             Game.Instance.Run();
             Game.Instance.Dispose();
         }
 
         private static void OnInitialization()
         {
-            Game.Instance.Screen = new GameWindow();
+            // INIT CODE
         }
 
         private static void OnFrameUpdate(object sender, GameHost e)
         {
-
+            // EACH FRAME CODE
         }
     }
 }
