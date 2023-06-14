@@ -1,4 +1,6 @@
-﻿using SadConsole.Input;
+﻿using SadConsole;
+using SadConsole.Input;
+using SadConsoleTemplate.Components;
 using SadRogue.Primitives;
 using System.Collections.Generic;
 
@@ -6,9 +8,24 @@ namespace SadConsoleTemplate.Entities
 {
     internal sealed class Player : Actor
     {
-        public Player() : base('@', Color.Red, Color.Transparent)
+        private HealthBarComponent _healthBarComponent;
+
+        public Player() : base('@', Color.Blue, Color.Transparent)
         {
             IsFocused = true;
+            MaxHealth = 100;
+        }
+
+        public void AddHealthBarComponent(ScreenSurface surface)
+        {
+            _healthBarComponent = new HealthBarComponent(this, 5, HealthBarComponent.Direction.Vertical)
+            {
+                MaxHealth = MaxHealth,
+                Health = MaxHealth
+            };
+
+            surface.Children.Add(_healthBarComponent);
+            _healthBarComponent.UpdatePosition();
         }
 
         private readonly Dictionary<Keys, Direction> _playerMovements = new()
@@ -26,7 +43,8 @@ namespace SadConsoleTemplate.Entities
                 if (keyboard.IsKeyPressed(key))
                 {
                     var moveDirection = _playerMovements[key];
-                    MoveTowards(moveDirection);
+                    if (MoveTowards(moveDirection))
+                        _healthBarComponent?.UpdatePosition();
                     break;
                 }
             }

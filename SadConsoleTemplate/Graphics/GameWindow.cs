@@ -38,7 +38,8 @@ namespace SadConsoleTemplate.Graphics
             Children.Add(MessageWindow);
 
             // Initialize the player entity
-            EntityManager.SpawnAt<Player>((Constants.Screens.MapScreen.Width / 2, Constants.Screens.MapScreen.Height / 2));
+            Player = EntityManager.SpawnAt<Player>((Constants.Screens.MapScreen.Width / 2, Constants.Screens.MapScreen.Height / 2));
+            Player.AddHealthBarComponent(MapWindow);
         }
     }
 }

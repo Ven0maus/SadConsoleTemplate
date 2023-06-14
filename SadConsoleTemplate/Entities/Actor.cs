@@ -27,21 +27,22 @@ namespace SadConsoleTemplate.Entities
             : base(foreground, background, glyph, zIndex)
         { }
 
-        public void MoveTowards(Point position, bool checkCanMove = true)
+        public bool MoveTowards(Point position, bool checkCanMove = true)
         {
-            if (Health == 0) return;
+            if (Health == 0) return false;
 
-            if (checkCanMove && !CanMoveTowards(position)) return;
+            if (checkCanMove && !CanMoveTowards(position)) return false;
 
             var oldPos = Position;
             Position = position;
 
             EntityManager.Update(oldPos, Position);
+            return true;
         }
 
-        public void MoveTowards(Direction position, bool checkCanMove = true)
+        public bool MoveTowards(Direction position, bool checkCanMove = true)
         {
-            MoveTowards(Position += position, checkCanMove);
+            return MoveTowards(Position + position, checkCanMove);
         }
 
         public bool CanMoveTowards(Point position)

@@ -19,7 +19,7 @@ namespace SadConsoleTemplate.Entities
             _entities.Add(position, actor);
         }
 
-        public static void SpawnAt<T>(Point position) where T : Actor, new()
+        public static T SpawnAt<T>(Point position) where T : Actor, new()
         {
             if (_entities.ContainsKey(position))
                 throw new Exception("An entity already exists at this location.");
@@ -29,6 +29,7 @@ namespace SadConsoleTemplate.Entities
             };
             EntityComponent.Add(actor);
             _entities.Add(position, actor);
+            return actor;
         }
 
         public static Actor RemoveAt(Point position)
