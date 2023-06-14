@@ -7,7 +7,7 @@ using Console = SadConsole.Console;
 
 namespace SadConsoleTemplate.Graphics.Screens
 {
-    internal class GameContainer : Console
+    internal class GameContainer : ScreenObject
     {
         private static GameContainer _instance;
         public static GameContainer Instance { get { return _instance; } }
@@ -23,7 +23,7 @@ namespace SadConsoleTemplate.Graphics.Screens
         /// </summary>
         /// <param name="asyncGame"></param>
         /// <exception cref="Exception"></exception>
-        public GameContainer() : base(Game.Instance.ScreenCellsX, Game.Instance.ScreenCellsY)
+        public GameContainer()
         {
             // Set singleton instance
             if (_instance != null)
